@@ -1,0 +1,126 @@
+//start a new project 
+django-admin startproject projectname
+
+//sync all changes in settings to the server
+python manage.py migrate
+
+//run server
+python manage.py runserver
+
+//Create an app
+python manage.py startapp appname
+//Add this appname to settings.py installed apps	
+
+
+
+//Changing content of an app (change content of models.py for an app)
+As in if you create a class to make use of in the webapp
+python manage.py makemigrations
+python manage.py migrate
+
+
+//Register the defined classes by relative importing in admin.py of the app for which you
+created the class in models.py 
+
+//To create a webpage in the webapp
+Create a class/function based view in views.py
+Views handles our webpages
+1. Create a new app (say 'pages')
+2. Create a function/class which gives an HTTP response (this http response is the HTML file).
+3. Add the function/class to to urls.py in the given format. 
+4. Make sure to add the HTML webpage name in TEMPLATES in settings.py
+
+//In views.py you can specify to return an html page 
+//this html page will be in the projectname << (created)templates folder
+Add the create template (filename.html) to TEMPLATES in settings.py
+
+
+//Context
+a dictionary created in python can be passed to a webpage.
+the items of this dictionary can be accessed in the html as 
+{{ dictionary.key }} //this will output the value 
+
+
+//loop in html : iterating over object passed as context
+{ % for i in object % }
+
+{{ i }}
+
+{% endfor%}
+
+
+//conditions in a template
+Note : it is preffered to have conditional statements in views itself
+{% if ab == True %}
+    statements
+{% else %}
+    statements
+{% endif %}
+
+
+
+//To create a form that inputs data into the database
+1. Create a model in models.py
+2. Register that model in admin.py
+3. Create its form in forms.py
+4. Create its view in views.py
+In views.py pass the form as context and configure the form to save when its valid
+
+5. Create the html file that you specified in the view.
+In the html, use the form tag and pass the csrf token.
+Use the form passed as context by {{form.as_p}}
+Put a submit button.
+
+6. Save and good to go.
+
+
+
+misc : classname.object.get('title' = 'dfdfd')
+check this out
+
+
+//To create custom validations 
+Validations validate if the data entered in the form is valid or not
+
+In forms.py where you make the class for the form.
+1. Overwrite the field in which you take input before class Meta by defining it again.
+2. After defining meta, define a function named cleaned_<Name of field>
+3. In this function,check conditions and raise exceptions as necessary.
+
+
+//To pass arguments via url.
+1. In urls.py, add the urlpattern of the form path('OGurl/<datatype : name_of_arg/ >' , name_of_view , name = 'some name')
+In this datatype is the datatype(ex : int) of the argument passed.
+
+Ex: path('addProduct/<int : id>/' , product_create_view , name = 'create')
+
+2. In the corresponding views.py (where the view is defined), add the name of argument as a function argument.
+
+	def name_of_view(request, *args, **kwaargs, name_of_arg):
+		.
+		#you can use the passed argument now
+		.
+		.
+
+
+Ex :
+	def product_create_view(request, *args, **kwaargs, name_of_arg):
+		.
+		.
+		.
+
+
+
+//To change an object in database through a form.
+1. In views.py, in view:
+	a. Get the object by :
+	obj = classname.objects.get(id = 1)
+	
+	b. Pass this object as an instance in the form:
+	
+	form = FormName(request.POST or None,instance = obj)
+
+	Reminder : We created FormName in forms.py 
+
+	c. Now pass this form as context.
+

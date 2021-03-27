@@ -1,0 +1,11 @@
+<h1>Input your grades</h1>
+<h4>This html is using raw html form</h4>
+
+{% block content%}
+<form method='POST'> {% csrf_token %}
+    {{ form.as_p }}
+    <input type='submit' value='Save' />
+
+</form>
+
+{% endblock %}
